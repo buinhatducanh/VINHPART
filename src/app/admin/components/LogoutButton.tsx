@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function AdminLogoutButton() {
     const router = useRouter()
@@ -8,10 +9,12 @@ export function AdminLogoutButton() {
     const handleLogout = async () => {
         try {
             await fetch('/api/auth/logout', { method: 'POST' })
+            toast.success('Đã đăng xuất thành công')
             router.push('/admin/login')
             router.refresh()
         } catch (error) {
             console.error('Logout error:', error)
+            toast.error('Có lỗi xảy ra khi đăng xuất')
         }
     }
 
@@ -24,3 +27,4 @@ export function AdminLogoutButton() {
         </button>
     )
 }
+

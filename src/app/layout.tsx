@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Header, Footer } from '@/components/layout'
+import { Toaster } from '@/shared/ui'
 
 export const metadata: Metadata = {
   title: 'AutoParts - Phụ Tùng Ô Tô Chính Hãng',
@@ -21,6 +22,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <Toaster />
       </body>
     </html>
   )

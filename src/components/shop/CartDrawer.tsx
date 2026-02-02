@@ -3,6 +3,7 @@
 import { X, Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
 import { useCartStore } from '@/store/cart-store'
 import { formatPrice } from '@/lib/utils'
+import { toast } from 'sonner'
 
 interface CartDrawerProps {
     isOpen: boolean
@@ -12,6 +13,16 @@ interface CartDrawerProps {
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCartStore()
     const total = totalPrice()
+
+    const handleRemoveItem = (itemId: number, itemName: string) => {
+        removeItem(itemId)
+        toast.info(`Đã xóa ${itemName} khỏi giỏ hàng`)
+    }
+
+    const handleClearCart = () => {
+        clearCart()
+        toast.info('Đã xóa tất cả sản phẩm khỏi giỏ hàng')
+    }
 
     if (!isOpen) return null
 
@@ -177,7 +188,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                             </button>
 
                                             <button
-                                                onClick={() => removeItem(item.id)}
+                                                onClick={() => handleRemoveItem(item.id, item.name)}
                                                 style={{
                                                     marginLeft: 'auto',
                                                     color: 'var(--color-primary)',
@@ -227,7 +238,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         </button>
 
                         <button
-                            onClick={clearCart}
+                            onClick={handleClearCart}
                             style={{
                                 width: '100%',
                                 marginTop: 'var(--space-2)',

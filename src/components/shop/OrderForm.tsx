@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useCartStore } from '@/store/cart-store'
 import { formatPrice } from '@/lib/utils'
 import { CheckCircle, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function OrderForm() {
     const { items, totalPrice, clearCart } = useCartStore()
@@ -24,6 +25,7 @@ export default function OrderForm() {
 
         if (items.length === 0) {
             setError('Giỏ hàng trống. Vui lòng thêm sản phẩm.')
+            toast.warning('Giỏ hàng trống. Vui lòng thêm sản phẩm.')
             return
         }
 
@@ -54,12 +56,15 @@ export default function OrderForm() {
             if (data.success) {
                 setSubmitted(true)
                 clearCart()
+                toast.success('Đặt hàng thành công! Chúng tôi sẽ liên hệ sớm nhất.')
             } else {
                 setError(data.error || 'Có lỗi xảy ra. Vui lòng thử lại.')
+                toast.error(data.error || 'Có lỗi xảy ra. Vui lòng thử lại.')
             }
         } catch (err) {
             console.error(err)
             setError('Không thể kết nối máy chủ. Vui lòng thử lại.')
+            toast.error('Không thể kết nối máy chủ. Vui lòng thử lại.')
         } finally {
             setLoading(false)
         }

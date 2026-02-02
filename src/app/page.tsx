@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { ShoppingCart, CheckCircle, Shield, Truck, Headphones } from 'lucide-react'
 import { BannerSlider, ProductCard, CartDrawer, OrderForm, CategoryFilter } from '@/components/shop'
 import { useCartStore } from '@/store/cart-store'
+import { toast } from 'sonner'
 import type { Product, Category, Banner } from '@/types'
 
 export default function HomePage() {
@@ -14,7 +15,6 @@ export default function HomePage() {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [toast, setToast] = useState<{ message: string; visible: boolean }>({ message: '', visible: false })
 
   const { addItem, totalItems } = useCartStore()
 
@@ -40,6 +40,7 @@ export default function HomePage() {
       } catch (err) {
         console.error('Error fetching data:', err)
         setError('Đã có lỗi xảy ra khi tải dữ liệu.')
+        toast.error('Đã có lỗi xảy ra khi tải dữ liệu')
       } finally {
         setLoading(false)
       }
@@ -54,8 +55,7 @@ export default function HomePage() {
 
   const handleAddToCart = (product: Product) => {
     addItem(product)
-    setToast({ message: `Đã thêm ${product.name} vào giỏ hàng`, visible: true })
-    setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000)
+    toast.success(`Đã thêm ${product.name} vào giỏ hàng`)
   }
 
   const features = [
@@ -223,37 +223,7 @@ export default function HomePage() {
 
       {/* Cart Drawer */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-
-      {/* Toast Notification */}
-      {toast.visible && (
-        <div style={{
-          position: 'fixed',
-          bottom: 'var(--space-20)',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: 'var(--color-black)',
-          color: 'var(--color-white)',
-          padding: 'var(--space-3) var(--space-6)',
-          borderRadius: 'var(--radius-full)',
-          boxShadow: 'var(--shadow-xl)',
-          zIndex: 200,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--space-3)',
-          border: '1px solid var(--color-primary)',
-          animation: 'fadeIn 0.3s ease'
-        }}>
-          <CheckCircle size={18} style={{ color: '#22c55e' }} />
-          <span style={{ fontWeight: 600, fontSize: 'var(--font-size-sm)' }}>{toast.message}</span>
-        </div>
-      )}
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-          to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-      `}</style>
     </>
   )
 }
+

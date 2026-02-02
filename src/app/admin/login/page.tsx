@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button, Input, Card, Alert } from '@/shared/ui'
+import { toast } from 'sonner'
 
 export default function AdminLoginPage() {
     const router = useRouter()
@@ -28,13 +29,16 @@ export default function AdminLoginPage() {
 
             if (!res.ok) {
                 setError(data.error || 'Đăng nhập thất bại')
+                toast.error(data.error || 'Đăng nhập thất bại')
                 return
             }
 
+            toast.success('Đăng nhập thành công!')
             router.push('/admin')
             router.refresh()
         } catch {
             setError('Đã xảy ra lỗi kết nối')
+            toast.error('Đã xảy ra lỗi kết nối')
         } finally {
             setLoading(false)
         }
