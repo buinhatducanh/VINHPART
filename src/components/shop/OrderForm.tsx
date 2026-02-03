@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'motion/react'
 import { useCartStore } from '@/store/cart-store'
 import { formatPrice } from '@/lib/utils'
 import { CheckCircle, Loader2 } from 'lucide-react'
@@ -72,28 +73,42 @@ export default function OrderForm() {
 
     if (submitted) {
         return (
-            <div className="card" style={{
-                padding: 'var(--space-12)',
-                textAlign: 'center'
-            }}>
-                <CheckCircle
-                    size={64}
-                    style={{
-                        color: '#22c55e',
-                        margin: '0 auto var(--space-6)'
-                    }}
-                />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="card"
+                style={{
+                    padding: 'var(--space-12)',
+                    textAlign: 'center'
+                }}
+            >
+                <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', delay: 0.2 }}
+                >
+                    <CheckCircle
+                        size={64}
+                        style={{
+                            color: '#22c55e',
+                            margin: '0 auto var(--space-6)'
+                        }}
+                    />
+                </motion.div>
                 <h3 style={{
                     fontSize: 'var(--font-size-2xl)',
                     fontWeight: 700,
-                    marginBottom: 'var(--space-4)'
+                    marginBottom: 'var(--space-4)',
+                    color: 'white'
                 }}>
                     Đặt hàng thành công!
                 </h3>
-                <p style={{ color: 'var(--color-gray-500)', marginBottom: 'var(--space-6)' }}>
+                <p style={{ color: 'var(--color-gray-400)', marginBottom: 'var(--space-6)' }}>
                     Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ sớm nhất có thể.
                 </p>
-                <button
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => {
                         setSubmitted(false)
                         setFormData({ name: '', phone: '', address: '', note: '' })
@@ -101,17 +116,25 @@ export default function OrderForm() {
                     className="btn btn-primary"
                 >
                     Đặt hàng mới
-                </button>
-            </div>
+                </motion.button>
+            </motion.div>
         )
     }
 
     return (
-        <form onSubmit={handleSubmit} className="card" style={{ padding: 'var(--space-6)' }}>
+        <motion.form
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            onSubmit={handleSubmit}
+            className="card"
+            style={{ padding: 'var(--space-6)' }}
+        >
             <h3 style={{
                 fontSize: 'var(--font-size-xl)',
                 fontWeight: 700,
-                marginBottom: 'var(--space-6)'
+                marginBottom: 'var(--space-6)',
+                color: 'white'
             }}>
                 Thông tin giao hàng
             </h3>
@@ -119,12 +142,13 @@ export default function OrderForm() {
             {/* Cart Summary */}
             {items.length > 0 && (
                 <div style={{
-                    background: 'var(--color-gray-100)',
+                    background: 'var(--color-gray-800)',
                     borderRadius: 'var(--radius-md)',
                     padding: 'var(--space-4)',
-                    marginBottom: 'var(--space-6)'
+                    marginBottom: 'var(--space-6)',
+                    border: '1px solid var(--color-gray-700)'
                 }}>
-                    <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-gray-600)', marginBottom: 'var(--space-2)' }}>
+                    <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-gray-400)', marginBottom: 'var(--space-2)' }}>
                         {items.length} sản phẩm trong giỏ hàng
                     </p>
                     <p className="price">{formatPrice(total)}</p>
@@ -133,9 +157,9 @@ export default function OrderForm() {
 
             {error && (
                 <div style={{
-                    background: '#fef2f2',
-                    border: '1px solid #fecaca',
-                    color: '#dc2626',
+                    background: 'rgba(220, 38, 38, 0.1)',
+                    border: '1px solid rgba(220, 38, 38, 0.3)',
+                    color: '#ef4444',
                     padding: 'var(--space-3) var(--space-4)',
                     borderRadius: 'var(--radius-md)',
                     marginBottom: 'var(--space-4)',
@@ -151,7 +175,8 @@ export default function OrderForm() {
                         display: 'block',
                         fontWeight: 600,
                         marginBottom: 'var(--space-2)',
-                        fontSize: 'var(--font-size-sm)'
+                        fontSize: 'var(--font-size-sm)',
+                        color: 'var(--color-gray-300)'
                     }}>
                         Họ và tên *
                     </label>
@@ -170,7 +195,8 @@ export default function OrderForm() {
                         display: 'block',
                         fontWeight: 600,
                         marginBottom: 'var(--space-2)',
-                        fontSize: 'var(--font-size-sm)'
+                        fontSize: 'var(--font-size-sm)',
+                        color: 'var(--color-gray-300)'
                     }}>
                         Số điện thoại *
                     </label>
@@ -189,7 +215,8 @@ export default function OrderForm() {
                         display: 'block',
                         fontWeight: 600,
                         marginBottom: 'var(--space-2)',
-                        fontSize: 'var(--font-size-sm)'
+                        fontSize: 'var(--font-size-sm)',
+                        color: 'var(--color-gray-300)'
                     }}>
                         Địa chỉ giao hàng *
                     </label>
@@ -208,7 +235,8 @@ export default function OrderForm() {
                         display: 'block',
                         fontWeight: 600,
                         marginBottom: 'var(--space-2)',
-                        fontSize: 'var(--font-size-sm)'
+                        fontSize: 'var(--font-size-sm)',
+                        color: 'var(--color-gray-300)'
                     }}>
                         Ghi chú
                     </label>
@@ -222,8 +250,10 @@ export default function OrderForm() {
                     />
                 </div>
 
-                <button
+                <motion.button
                     type="submit"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     className="btn btn-primary"
                     disabled={loading || items.length === 0}
                     style={{
@@ -240,14 +270,8 @@ export default function OrderForm() {
                     ) : (
                         'ĐẶT HÀNG NGAY'
                     )}
-                </button>
+                </motion.button>
             </div>
-
-            <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-        </form>
+        </motion.form>
     )
 }
